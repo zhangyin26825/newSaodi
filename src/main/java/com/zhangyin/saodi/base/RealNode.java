@@ -14,7 +14,7 @@ public class RealNode extends AbstractNode{
 	
 	@Override
 	public boolean isFinish() {
-		return isReal();
+		return isMarked();
 	}
 
 	@Override

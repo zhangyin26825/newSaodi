@@ -50,19 +50,19 @@ public class Main {
 				
 				AreaFactory factory=new AreaFactory(virtualNodes,vmg.getPairs());
 				List<Area> areas = factory.generatorArea();
-				//List<Area>  zeroSolvesArea=new ArrayList<>();
+				List<Area>  zeroSolvesArea=new ArrayList<>();
 				
-				 List<Area> zeroSolvesArea = areas.stream().filter(a->a.getVirtualNodes().size()==2).collect(Collectors.toList());
+				// List<Area> zeroSolvesArea = areas.stream().filter(a->a.getVirtualNodes().size()==2).collect(Collectors.toList());
 				
 				System.out.println("区域的数量为"+areas.size());
-//				for (Iterator iterator = areas.iterator(); iterator.hasNext();) {
-//					Area area = (Area) iterator.next();
-//					System.out.println("该区域的无起点解法有 "+area.getSolves().size());
-//					if(area.getSolves().size()==1){
-//						zeroSolvesArea.add(area);
-//					}
-//					area.clear();
-//				}
+				for (Iterator iterator = areas.iterator(); iterator.hasNext();) {
+					Area area = (Area) iterator.next();
+					System.out.println("该区域的无起点解法有 "+area.getSolves().size());
+					if(area.getSolves().size()==1){
+						zeroSolvesArea.add(area);
+					}
+					area.clear();
+				}
 				System.out.println("无起点解法的区域数量为"+zeroSolvesArea.size());
 				Area area = zeroSolvesArea.get(6);
 				System.out.println("区域的真实节点数量为"+area.getRealnodes().size());
