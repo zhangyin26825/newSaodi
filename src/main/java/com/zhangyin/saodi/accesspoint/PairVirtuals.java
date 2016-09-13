@@ -26,6 +26,8 @@ public class PairVirtuals {
 	VirtualNode  nearA;
 	
 	VirtualNode  nearB;
+	
+	List<VirtualNode> list;
 
 	public PairVirtuals(RealNode a, RealNode b, Direction atoB) {
 		super();
@@ -42,7 +44,7 @@ public class PairVirtuals {
 		}else{
 			required=true;
 		}
-		
+		list=new ArrayList<>(2);
 		assert a.get(AtoB)==b;
 		assert b.get(Direction.getInverseDirection(AtoB))==a;
 	}
@@ -52,6 +54,9 @@ public class PairVirtuals {
 	}
 	//生成虚拟节点
 	public List<VirtualNode>  generatorVirtualNode(){
+		if(!list.isEmpty()){
+			return list;
+		}
 		assert a.get(AtoB)==b;
 		assert b.get(Direction.getInverseDirection(AtoB))==a;
 		
@@ -59,7 +64,9 @@ public class PairVirtuals {
 		assert b.isReal();
 		
 		  nearA=new VirtualNodeImpl(required, a);
+		  nearA.setPairVirtuals(this);
 		  nearB=new VirtualNodeImpl(required, b);
+		  nearB.setPairVirtuals(this);
 		nearA.setPair(nearB);
 		nearB.setPair(nearA);
 		
@@ -68,8 +75,6 @@ public class PairVirtuals {
 		
 		b.put(Direction.getInverseDirection(AtoB), nearB);
 		nearB.put(AtoB, b);
-		
-		List<VirtualNode> list=new ArrayList<>(2);
 		list.add(nearA);
 		list.add(nearB);
 		return list;

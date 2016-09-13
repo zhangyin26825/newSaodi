@@ -1,6 +1,11 @@
 package com.zhangyin.saodi.base;
 
+import com.zhangyin.saodi.accesspoint.PairVirtuals;
+
 public abstract class VirtualNode extends AbstractNode{
+	
+	
+	public PairVirtuals pairVirtuals;
 	//每个虚拟节点都对应一个真实节点
 	public abstract RealNode  getRealNode();
 	//虚拟节点是成对存在的，
@@ -46,6 +51,14 @@ public abstract class VirtualNode extends AbstractNode{
 	public int getColNum() {
 		return getRealNode().getColNum();
 	}
+	public PairVirtuals getPairVirtuals() {
+		return pairVirtuals;
+	}
+	public void setPairVirtuals(PairVirtuals pairVirtuals) {
+		this.pairVirtuals = pairVirtuals;
+	}
+	
+	
 
 	
 	

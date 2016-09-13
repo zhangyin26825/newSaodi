@@ -66,6 +66,9 @@ public  abstract class AbstractNode implements Map<Direction,AbstractNode>{
 	
 	public abstract int getColNum();
 	
+	public abstract boolean isAccessPoint();
+	public abstract void setAccessPoint(boolean b); 
+	
 	public boolean isMarked() {
 		return marked;
 	}
@@ -128,8 +131,7 @@ public  abstract class AbstractNode implements Map<Direction,AbstractNode>{
 	public Set<java.util.Map.Entry<Direction, AbstractNode>> entrySet() {
 		return moves.entrySet();
 	}
-	public abstract boolean isAccessPoint();
-	public abstract void setAccessPoint(boolean b); 
+	
 	
 
 }

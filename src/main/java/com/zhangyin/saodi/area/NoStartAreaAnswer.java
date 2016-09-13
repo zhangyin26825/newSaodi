@@ -24,6 +24,8 @@ public class NoStartAreaAnswer {
 		this.result = result;
 	}
 	
+	//TODO
+	
 	
 
 }
