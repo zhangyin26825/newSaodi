@@ -31,12 +31,15 @@ public class Area {
 	
 	List<NoStartAreaAnswer> solves;
 	
+	List<EndAreaAnswer> endsolves;
+	
 	Set<AbstractNode> areaNode;
 
 	public Area(Set<AbstractNode> areaNode) {
 		virtualNodes=new HashSet<>();
 		realnodes=new HashSet<>();
 		solves=new ArrayList<>();
+		endsolves=new ArrayList<>();
 		result=new Stack<>();
 		this.areaNode=areaNode;
 		for (Iterator iterator = areaNode.iterator(); iterator.hasNext();) {
@@ -108,6 +111,9 @@ public class Area {
 			// 这里的情况是，到达一个虚拟节点之后，可以达到当前区域的任意一个虚拟节点，重新开始进行这个步骤
 			if(end.isReal()){
 				//行走一步之后，到达一个真实节点
+				if(isfinish()){
+					endsolves.add(new EndAreaAnswer(this, result));
+				}	
 				walkFromNode(end, false);
 			}else{
 				//行走一步之后，达到一个虚拟节点

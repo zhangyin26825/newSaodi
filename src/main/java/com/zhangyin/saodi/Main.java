@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 import com.zhangyin.saodi.accesspoint.VirtualNodeGenerator;
 import com.zhangyin.saodi.area.Area;
 import com.zhangyin.saodi.area.AreaFactory;
+import com.zhangyin.saodi.area.NoStartAreaAnswer;
 import com.zhangyin.saodi.area.NodeAreaMapping;
 import com.zhangyin.saodi.base.LevelMap;
 import com.zhangyin.saodi.base.RealNode;
@@ -50,27 +51,73 @@ public class Main {
 				
 				AreaFactory factory=new AreaFactory(virtualNodes,vmg.getPairs());
 				List<Area> areas = factory.generatorArea();
-				List<Area>  zeroSolvesArea=new ArrayList<>();
-				
-				// List<Area> zeroSolvesArea = areas.stream().filter(a->a.getVirtualNodes().size()==2).collect(Collectors.toList());
-				
-				System.out.println("区域的数量为"+areas.size());
+				NodeAreaMapping mapping=new NodeAreaMapping(areas);
 				for (Iterator iterator = areas.iterator(); iterator.hasNext();) {
 					Area area = (Area) iterator.next();
-					System.out.println("该区域的无起点解法有 "+area.getSolves().size());
+					System.out.print(area.getSolves().size()+"  ");	
 					if(area.getSolves().size()==1){
-						zeroSolvesArea.add(area);
+						NoStartAreaAnswer noStartAreaAnswer = area.getSolves().get(0);
+						{
+							Set<VirtualNode> from = noStartAreaAnswer.getFrom();
+							for (Iterator iterator2 = from.iterator(); iterator2.hasNext();) {
+								VirtualNode virtualNode = (VirtualNode) iterator2.next();
+								Area area2 = mapping.get(virtualNode.getPair());
+								List<NoStartAreaAnswer> solves = area2.getSolves();
+								for (Iterator iterator3 = solves.iterator(); iterator3.hasNext();) {
+									NoStartAreaAnswer noStartAreaAnswer2 = (NoStartAreaAnswer) iterator3.next();
+									if(!noStartAreaAnswer2.getTo().contains(virtualNode.getPair())){
+										noStartAreaAnswer2.setDel(true);
+									}
+								}
+								
+							}
+						}
+						
+						Set<VirtualNode> to = noStartAreaAnswer.getTo();
+						for (Iterator iterator2 = to.iterator(); iterator2.hasNext();) {
+							VirtualNode virtualNode = (VirtualNode) iterator2.next();
+							Area area2 = mapping.get(virtualNode.getPair());
+							List<NoStartAreaAnswer> solves = area2.getSolves();
+							for (Iterator iterator3 = solves.iterator(); iterator3.hasNext();) {
+								NoStartAreaAnswer noStartAreaAnswer2 = (NoStartAreaAnswer) iterator3.next();
+								if(!noStartAreaAnswer2.getFrom().contains(virtualNode.getPair())){
+									noStartAreaAnswer2.setDel(true);
+								}
+							}
+							
+						}	
 					}
-					area.clear();
 				}
-				System.out.println("无起点解法的区域数量为"+zeroSolvesArea.size());
-				Area area = zeroSolvesArea.get(6);
-				System.out.println("区域的真实节点数量为"+area.getRealnodes().size());
-				System.out.println("区域的虚拟节点数量为"+area.getVirtualNodes().size());
-				AreaPanel panel=new AreaPanel(area);
-				DemoFrame demoFrame=new DemoFrame(panel);
-				area.clear();
-				area.chooseVirtualNodes(true);
+				
+				System.out.println();
+				System.out.println();
+				for (Iterator iterator = areas.iterator(); iterator.hasNext();) {
+					Area area = (Area) iterator.next();
+					System.out.print(area.getSolves().stream().filter(n->!n.isDel()).count()+"  ");
+				}
+				
+				
+//				List<Area>  zeroSolvesArea=new ArrayList<>();
+//				
+//				// List<Area> zeroSolvesArea = areas.stream().filter(a->a.getVirtualNodes().size()==2).collect(Collectors.toList());
+//				
+//				System.out.println("区域的数量为"+areas.size());
+//				for (Iterator iterator = areas.iterator(); iterator.hasNext();) {
+//					Area area = (Area) iterator.next();
+//					System.out.println("该区域的无起点解法有 "+area.getSolves().size());
+//					if(area.getSolves().size()==1){
+//						zeroSolvesArea.add(area);
+//					}
+//					area.clear();
+//				}
+//				System.out.println("无起点解法的区域数量为"+zeroSolvesArea.size());
+//				Area area = zeroSolvesArea.get(6);
+//				System.out.println("区域的真实节点数量为"+area.getRealnodes().size());
+//				System.out.println("区域的虚拟节点数量为"+area.getVirtualNodes().size());
+//				AreaPanel panel=new AreaPanel(area);
+//				DemoFrame demoFrame=new DemoFrame(panel);
+//				area.clear();
+//				area.chooseVirtualNodes(true);
 				
 //				NodeAreaMapping nam=new NodeAreaMapping(areas);
 //				System.out.println("节点区域映射中虚拟节点的数量为"+nam.getMap().keySet().stream().filter(n->!n.isReal()).count());
